@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+#alldata1 input > ,textarea ,select , a{
+    width: 300px !important;
+
+}
+#alldata1 input  textarea{
+   resize: none !important;
+
+}
+</style>
+<div class="bg-education" style="height: 78px;"></div>
+
+
+{% if  object.user == request.user %}
+
+
+    
+    <form  action=""  class="d-flex flex-column align-items-center my-4" method="POST">
+        {% csrf_token %}
+    <div  id="alldata1">
+        {% for x in form     %}
+            {{x}}
+        {% endfor %}
+     </div>      
+     <center style="width: 300px;"><button class="btn btn-primary mt-2 w-100">Yangilash</button></center> 
+
+    </form>
+
+<script>
+for (const iterator of document.getElementById('alldata1').children) {
+if (iterator.tagName != 'SELECT') {
+    iterator.setAttribute('class','form-control my-2')
+      
+}
+else{
+    iterator.setAttribute('class','form-select my-2')
+}
+iterator.placeholder = iterator.name
+}
+document.getElementById('id_body').setAttribute('style','  resize: none !important;')
+</script>
+{% else %}
+
+<script>
+    location.href = '/scholl/{{object.id}}'
+</script>
+{{object.id}}
+
+
+{% endif %}
+
+
+{% endblock content %}
+    

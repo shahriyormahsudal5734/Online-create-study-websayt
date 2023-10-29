@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="height: 70px; " class="bg-education"></div>
+<section style="display: flex; align-items: center; justify-content: center; width: 100%; height: 50vh;">
+<div>
+
+
+
+    <center><h3>Ro'yxatdan o'tish</h3></center>
+<form method="POST">
+    {% csrf_token %}
+    <center>
+
+
+<input class="form-control my-2" style="width: 300px !important;" type="text" placeholder="Ismingiz yozing" name="username" maxlength="20" autocapitalize="none" autocomplete="username" autofocus="" required="" id="id_username">
+<input class="form-control my-2" style="width: 300px !important;" type="password" placeholder="Parol kiriting" name="password1">
+<input class="form-control my-2" style="width: 300px !important;" type="password" placeholder="Parolni qaytadan kiriting" name="password2">
+</center> 
+<br>
+
+  <button type="submit" class="btn btn-warning">Ro'yxatdan o'tish</button>
+    <a href="{% url 'login' %}"  class="btn btn-primary">Akkauntingiz bormi ?</a>
+</form>
+</div>
+</section>
+{% endblock content %}

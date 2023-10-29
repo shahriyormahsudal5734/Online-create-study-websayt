@@ -1,0 +1,393 @@
+{% extends 'base.html' %}
+{% block content %}
+    
+<style>
+
+    #education_name:hover{
+        background-color: rgb(0, 125, 125);
+
+    }
+
+    .pagination li a{
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #cbe3f8;
+        border-radius: 5px;
+        color: black;
+        font-size: large;
+    }
+    .pagination .disabled{
+        background-color: transparent;
+    }
+    .pagination .active a{
+        background-color: #6f42c1;
+
+        color: white;
+
+    }
+
+#formslar select{
+    width: fit-content !important;
+}
+#formslar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px !important;    
+}
+</style>
+
+
+
+            <section class="hero-section pb-3 d-flex justify-content-center align-items-center" id="section_1">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-8 col-12 mx-auto">
+                            <h1 class="text-white text-center">Hello {{user}}</h1>
+
+                            <h6 class="text-center text-white">Butun O'zbekiston boylab oquvmarkaz va kurs toping va oqing</h6>
+
+                        
+                        <form id="formslar"  method="get"> 
+                            {% for v in dars.form %}
+                                {{v}}
+                            {% endfor %}
+
+                            <input class="btn btn-primary py-2 px-4" type="submit" value="Qidiring" />
+                        </form>
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+ <br>
+
+<!-- {{users|length}}
+{% for x in users %}
+{{x.checking}}
+{% endfor %} -->
+
+
+
+
+
+
+            <section class="explore-section my-3" id="section_2">
+
+
+
+
+                <div class="container">
+                <div class="row">
+
+                    <div id="test-list" class="col-12">
+                        {% if dars.qs|length == 0 %}
+                        <center><h3>Malumot topilmadi </h3></center>
+                    
+                    {% else %}
+                    <center><h3> Kurslar </h3></center>
+
+                    {% endif %}
+                         <div  class="list d-flex justify-content-center gap-4 flex-wrap ">
+
+
+
+
+    
+                            {% for x in dars.qs %}
+                            <div class="name" style="width: 350px !important; ">
+                                <div class="custom-block bg-white shadow-lg p-3">
+                                    <a href="{% url 'detailkurs' x.id %}">
+                                        <div class="d-flex">
+                                            <div>
+                                                <h5  class="mb-2">{{x.title|slice:"0:40"}}</h5>
+
+                                                <p style="height: 100px;"  class="mb-0">{{x.body|slice:"0:100"}}...</p>
+                                            </div>
+
+                                        </div>
+
+                                        <img src="/media/{{x.img}}" class="custom-block-image img-fluid" alt="">
+                                    </a>
+                                    <a id="education_name" href="scholl/{{x.markaz.id}}"  style=" align-items: center !important; border-radius: 10px !important;" class="bg-finance d-flex align-items-center justify-content-center py-2 px-1 mt-2" >
+                                        <div  class="text-center text-white text-capitalize ">{{x.markaz.title}} </div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" x="0" y="0" viewBox="0 0 64 64" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M33.26 30.72 42 26.69V32a.984.984 0 0 1-.2.6A12.513 12.513 0 0 1 32 37a12.513 12.513 0 0 1-9.8-4.4.984.984 0 0 1-.2-.6v-5.31l8.75 4.04A2.991 2.991 0 0 0 32 31a2.929 2.929 0 0 0 1.26-.28zM32 29a1.005 1.005 0 0 0 .419-.092l13-6a1 1 0 0 0 0-1.816l-13-6a1.004 1.004 0 0 0-.838 0l-13 6a1 1 0 0 0 0 1.816l13 6A1.005 1.005 0 0 0 32 29zm12 0a1 1 0 0 0 2 0v-4.16l-2 .92zm12-3c0 18.294-22.45 35.098-23.406 35.804a1 1 0 0 1-1.188 0C30.45 61.098 8 44.294 8 26a24 24 0 0 1 48 0zm-6 0a18 18 0 1 0-18 18 18.02 18.02 0 0 0 18-18z" data-name="17-Education" fill="#ffffff" opacity="1" data-original="#000000" class=""></path></g></svg>
+                                    </a>
+                                   
+                                </div>
+                              </div>
+                            {% endfor %}
+                                
+
+
+
+
+                            </div>
+        <div  class="pagination " style="display: flex ;  justify-content: center; gap: 15px;"></div> 
+           
+                    
+                    </div>
+                </div>
+
+{% if request.user.is_authenticated %}
+<center class="mt-4">
+    <button data-bs-toggle="modal" data-bs-target="#open1" class="btn bg-warning text-center">O'quv markaz qoshish</button>
+        
+    <div class="modal fade" id="open1" tabindex="-1" aria-labelledby="close1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="close1">O'quv markaz qoshish</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="add_newoqw" method="POST" enctype="multipart/form-data"   class="modal-body">
+          {% csrf_token %}
+            <input class="form-control mb-2" required minlength="5" maxlength="20" type="text" name="qtitle" placeholder="O'quv markaz nomi">
+          <input class="form-control mb-2" required minlength="30" maxlength="500" type="text" name="qbody" placeholder="O'quv markaz haqida batafsil">
+          <input class="form-control mb-2" required  type="file" accept="image/*" name="qimg" placeholder="O'quv markaz rasmi yoki logosi">
+          <input class="form-control mb-2" required  type="number" name="qnumber" placeholder="O'quv markaz no'meri">
+          <input class="form-control mb-2" type="url" name="qtelegram" placeholder="O'quv markaz telegrami kirgizish majburiy emas">
+          <input class="form-control mb-2" type="url" name="qinstagram" placeholder="O'quv markaz instagrami kirgizish majburiy emas">
+          <input class="form-control mb-2" type="url" name="qfacebook" placeholder="O'quv markaz facebooki kirgizish majburiy emas">
+          <input class="form-control mb-2" type="url" name="qyoutobe" placeholder="O'quv markaz youtobei kirgizish majburiy emas">
+          <input class="form-control mb-2" maxlength="15" minlength="5" type="text" name="qmanzil" placeholder="O'quv markaz manzili">
+          <select class="form-select" name="qviloyat1" >
+            {% for v in all_viloyat %}
+                <option value="{{v.id}}">{{v|title}}</option>
+            {% endfor %}
+          </select>
+          <input type="submit" class="btn btn-warning mt-3" value="Yaratish">
+
+            </form>
+    
+          </div>
+        </div>
+    </div>
+</center>
+{% else %}
+<center class="mt-4">
+    <button onclick="alert('Royhatdan oting')" class="btn bg-warning text-center">O'quv markaz qoshish</button>
+        
+
+</center>
+{% endif %}
+
+    
+
+
+            </section>
+ 
+
+            <section class="timeline-section section-padding" id="section_3">
+                <div class="section-overlay"></div>
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-12 text-center">
+                            <h2 class="text-white mb-4">Bu qanday ishlaydi?</h1>
+                        </div>
+
+                        <div class="col-lg-10 col-12 mx-auto">
+                            <div class="timeline-container">
+                                <ul class="vertical-scrollable-timeline" id="vertical-scrollable-timeline">
+                                    <div class="list-progress">
+                                        <div class="inner"></div>
+                                    </div>
+
+                                    <li>
+                                        <h4 class="text-white mb-3">Sevimli mavzuingizni qidiring</h4>
+
+                                        <p class="text-white">Hozir dunyo miqyosida talab eng yuqori boʻlgan kasblar qaysiligi haqida maʼlumotga egamisiz? Buning javobini ManpowerGroup kompaniyasi tomonidan 2022-yilda oʻtkazilgan tadqiqotdan bilish mumkin. The Employment Outlook Survey (Bandlik istiqbollari tadqiqoti)ning natijalariga koʻra, IT-Data, savdo va marketing, operatsiya-logistika, tovar hamda xizmatlar ishlab chiqarish, shuningdek, mijozlar bilan ishlash va front-ofis sohasi mutaxassislariga talab yuksak. Mehnat bozorida yetakchi boʻlgan kasb egalari esa boshqa soha vakillariga nisbatan koʻproq daromad koʻrishi hech kimga sir emas.
+
+                                            Bugungi globallashuv davrida esa tamoman boshqa yoʻnalish boʻyicha oʻqigan, ishlayotgan taqdiringizda ham yuqoridagi, xususan, serdaromad sohalarni oʻrganishingiz, ustingizda ishlab muvaffaqiyatga erishishingiz mumkin. Faqat buning uchun hozir, ayni vaqtda ishga kirishish kerak. Ha, toʻgʻri oʻqidingiz, harakatni boshlash kerak, boshlaganda ham zudlik bilan. Yaʼni Stiv Jobs, Elon Mask-u, Mark Sukerberg va Pavel Durov singari kishilarning hayot yoʻli va biografiyasini oʻqib, xayol va orzularning oʻzi bilan cheklanmasdan dunyo mehnat bozorini oʻrganish, talab yuqori, shu bilan birga, siz uchun chindan ham qiziqarli sohani oʻrganishga kirishish kerak. Bugungi kunda faoliyat yuritadigan va turli sohalarga ixtisoslashgan oʻquv markazlariga murojaat qilish esa bu borada eng yaxshi yechim boʻla oladi. Ishni turli sohada bilim beradigan taʼlim maskanlari, oʻquv markazlari haqida muntazam xabardor qilib boradigan Rank.uz saytidagi maʼlumotlarni oʻrganishdan boshlashingiz mumkin. Yana-da oson va qulay boʻlishi uchun esa quyida Toshkent shahridagi turli fan va kasb boʻyicha bilim beradigan oʻquv markazlari haqida maʼlumot taqdim qilamiz.</p>
+
+                                        <div class="icon-holder">
+                                          <i class="bi-search"></i>
+                                        </div>
+                                    </li>
+                                    
+
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-5">
+                            <p class="text-white">
+                                Want to learn more?
+                                <a href="#" class="btn custom-btn custom-border-btn ms-3">Check out Youtube</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="faq-section section-padding" id="section_4">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-6 col-12">
+                            <h2 class="mb-4">Frequently Asked Questions</h2>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="col-lg-5 col-12">
+                            <img src="/static/images/faq_graphic.jpg" class="img-fluid" alt="FAQs">
+                        </div>
+
+                        <div class="col-lg-6 col-12 m-auto">
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        What is Topic Listing?
+                                        </button>
+                                    </h2>
+
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            Topic Listing is free Bootstrap 5 CSS template. <strong>You are not allowed to redistribute this template</strong> on any other template collection website without our permission. Please contact TemplateMo for more detail. Thank you.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        How to find a topic?
+                                    </button>
+                                    </h2>
+
+                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            You can search on Google with <strong>keywords</strong> such as templatemo portfolio, templatemo one-page layouts, photography, digital marketing, etc.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        Does it need to paid?
+                                    </button>
+                                    </h2>
+
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="contact-section section-padding section-bg" id="section_5">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-12 col-12 text-center">
+                            <h2 class="mb-5">Get in touch</h2>
+                        </div>
+
+                        <div class="col-lg-5 col-12 mb-4 mb-lg-0">
+                            <iframe class="google-map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2595.065641062665!2d-122.4230416990949!3d37.80335401520422!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858127459fabad%3A0x808ba520e5e9edb7!2sFrancisco%20Park!5e1!3m2!1sen!2sth!4v1684340239744!5m2!1sen!2sth" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12 mb-3 mb-lg- mb-md-0 ms-auto">
+                            <h4 class="mb-3">Head office</h4>
+
+                            <p>Bay St &amp;, Larkin St, San Francisco, CA 94109, United States</p>
+
+                            <hr>
+
+                            <p class="d-flex align-items-center mb-1">
+                                <span class="me-2">Phone</span>
+
+                                <a href="tel: 305-240-9671" class="site-footer-link">
+                                    305-240-9671
+                                </a>
+                            </p>
+
+                            <p class="d-flex align-items-center">
+                                <span class="me-2">Email</span>
+
+                                <a href="mailto:info@company.com" class="site-footer-link">
+                                    info@company.com
+                                </a>
+                            </p>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12 mx-auto">
+                            <h4 class="mb-3">Dubai office</h4>
+
+                            <p>Burj Park, Downtown Dubai, United Arab Emirates</p>
+
+                            <hr>
+
+                            <p class="d-flex align-items-center mb-1">
+                                <span class="me-2">Phone</span>
+
+                                <a href="tel: 110-220-3400" class="site-footer-link">
+                                    110-220-3400
+                                </a>
+                            </p>
+
+                            <p class="d-flex align-items-center">
+                                <span class="me-2">Email</span>
+
+                                <a href="mailto:info@company.com" class="site-footer-link">
+                                    info@company.com
+                                </a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.min.js"></script>
+
+<script>
+document.getElementById('id_viloyatlar').setAttribute('class','form-select')
+document.getElementById('id_category').setAttribute('class','form-select')
+
+document.getElementById('id_viloyatlar').children[0].innerHTML = 'Barcha viloyat'
+document.getElementById('id_category').children[0].innerHTML = 'Barcha category'
+
+
+    
+var monkeyList = new List('test-list', {
+              valueNames: ['name'],
+              page: 6,
+              pagination: [{
+                  paginationClass: "pagination",
+                  outerWindow: 1,
+                }
+            ]
+});
+            
+document.getElementById('add_newoqw').addEventListener("submit",(e)=>{
+alert('Bu oquv markaz adminga yuborildi tasdiqlansa qoshiladi')
+
+})
+
+
+         
+</script>
+
+            {% endblock content %}          

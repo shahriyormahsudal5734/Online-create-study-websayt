@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="background-color: #80d0c7; height: 78px;" ></div>
+
+<div  class="d-flex bg-info bg-opacity-25 section-padding">
+<a href="/scholl/{{kurs_info.markaz.id}}" style="width: fit-content; padding: 15px ; border-radius: 20px;" class="container bg-info bg-opacity-50 text-white  d-flex  flex-wrap align-items-center gap-3">
+<img style="width: 150px; height: 150px; border-radius: 50%; box-sizing: content-box; border: 2px solid rgba(62, 62, 62, 0.96);" src="/media/{{kurs_info.markaz.img}}" alt="">
+<div>
+    <h2 class=" text-white"> {{kurs_info.markaz|title}}</h2>
+    <div class="d-flex align-items-center gap-4">
+   
+    <div class="d-flex align-items-center gap-2 my-2"> 
+        <i class="fa-solid fa-location-dot fs-4"></i>
+        <div class=" text-capitalize fs-5" >{{kurs_info.markaz.viloyat1}} , {{kurs_info.markaz.manzil}}</div>
+    </div>
+    <div class="d-flex align-items-center gap-2 my-2"> 
+        <i class="fa fa-phone fs-4"></i>
+        <div class=" text-capitalize fs-5" >{{kurs_info.markaz.number}}</div>
+    </div>
+
+
+ </div>
+</div>
+</a>
+
+</div>
+
+<div class="d-flex flex-wrap justify-content-center gap-3 align-items-center my-5">
+    <div class="col-11 col-lg-6">
+    <h3 class="text-dark ">{{kurs_info}}</h3>
+    <p class="text-dark ">
+
+{% if kurs_info.body|length > 500 %}
+{{kurs_info.body|slice:"500"}} <a data-bs-toggle="modal" data-bs-target="#exampleModal1" class=" btn btn-primary py-0 px-2">red more</a>
+<div class="modal fade modal-lg" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ko'proq malumot</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+  <div  class="modal-body d-flex flex-column gap-2">
+<h3>{{kurs_info|title}}</h3>
+<p>{{kurs_info.body}}</p>
+</div>
+
+    </div>
+  </div>
+</div>
+{% else %}
+{{kurs_info.body}}
+{% endif %}
+  
+
+    </p> 
+
+
+
+    <p>{{kurs_info.time|timesince}} oldin</p>
+
+    </div>
+    <img class="col-11 col-lg-5" src="/media/{{kurs_info.img}}" alt="">
+</div>
+
+
+<div class=" py-5 section-bg d-flex flex-wrap justify-content-center gap-3">
+<h4 style="border-radius: 5px !important;" class="fs-5 bg-info bg-opacity-50  text-black px-4 py-2">Davomiyligi : {{kurs_info.davomiyligi}}-oy</h4>
+<h4 style="border-radius: 5px !important;" class="fs-5 bg-info bg-opacity-50  text-black px-4 py-2">Oylik narhi : {{kurs_info.price}}$</h4>
+<h4 style="border-radius: 5px !important;" class="fs-5 bg-info bg-opacity-50  text-black px-4 py-2">Ariza tahlaganlar : {% if kurs_info.applys %}{{kurs_info.applys}}{% else %}0{% endif %}-ta</h4>
+<h4 style="border-radius: 5px !important;" class="fs-5 bg-info bg-opacity-50  text-black px-4 py-2">Yonalish : {{kurs_info.category}}</h4>
+
+<h4 style="border-radius: 5px !important;" class="fs-5 bg-info bg-opacity-50  text-black px-4 py-2">Viloyat : {{kurs_info.viloyatlar}}</h4>
+
+</div>
+
+
+{% if show == 'true'%}
+<section id="kursqowiw">
+  <center>
+      <button  data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary my-4 fs-5 d-flex align-items-center gap-2">
+        Kursga  Ariza topshirish <i class="fa fa-plus"></i></button>
+  </center>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+      <form method="POST" id="request"  enctype="multipart/form-data" class="modal-body d-flex flex-column gap-2">
+  {% csrf_token %}
+  <input name="atitle" required maxlength="20" class="form-control" placeholder="Ism damilya  "  type="text">
+    <textarea name="abody" required class="form-control" minlength="20" placeholder="Maqsadingizni yozing" style="resize: none;" cols="30" rows="10"></textarea>
+    <input name="anumber" required class="form-control" placeholder="Telefon raqam" type="number" value="+998"  oninput="if(this.value.toString().length>12){this.value = this.value.slice(0,12 )}else{}">
+    <input name="aage" required class="form-control" placeholder="Yoshingiz" type="number">
+    <div>O'zingizni rasmingizni jonating</div>
+    <input name="aimg" required class="form-control"  type="file" accept="image/*">
+
+    <input type="submit"  value="jonatish">
+      </form>
+  
+        </div>
+      </div>
+  </div>
+</section>
+{% else %}
+<section id="kursqowiw">
+  <center>
+      <button  data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary my-4 fs-5 d-flex align-items-center gap-2">
+        Kursga  Ariza topshirish <i class="fa fa-plus"></i></button>
+  </center>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div >
+
+  <center class="modal-body"><h3>Ariza topshirgansiz</h3></center>
+        </div>
+      </div>
+  </div>
+</section>
+{% endif %}
+  
+
+
+
+
+
+
+    
+<script>
+
+
+document.getElementById('request').addEventListener("submit",(e)=>{
+alert('Arizangiz qabul qilindi')
+
+})
+
+
+</script>
+
+
+{% endblock content %}
+    

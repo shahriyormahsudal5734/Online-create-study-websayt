@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+    
+
+
+<header class="site-header d-flex flex-column justify-content-center align-items-center">
+<h2 class="text-white text-center">Barcha oquv markazlar</h2>
+</header>
+
+
+     
+<div class="container my-4">
+<div class="row">
+<div  class="col-lg-8 col-12 mt-3 mx-auto">
+
+{% for x in data1 %}
+{% if x.checking == False %}
+{% else %}
+<div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
+    <div class="d-flex">
+        <img src="/media/{{x.img}}" class="custom-block-image img-fluid" alt="">
+        <div class="custom-block-topics-listing-info d-flex">
+            <div>
+                <h5 class="mb-2">{{x|title}}</h5>
+
+                <p class="mb-0">{{x.body|slice:"120"}}...</p>
+
+                <a href="/scholl/{{x.id}}" class="btn custom-btn mt-3 mt-lg-4">Batafsil ma'lumot</a>
+                {% if user.is_superuser %}
+                <a href="/delete_true/{{x.id}}" class="btn custom-btn bg-danger mt-3 mt-lg-4">O'chirish</a>
+           {% endif%}
+            </div>
+
+            <span class="badge bg-design rounded-pill ms-auto">{{x.applys}}</span>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+
+</div>  
+</div> 
+</div>
+        
+
+{% if user.is_superuser %}
+{% for x in data1 %}
+
+{% if x.checking != False %}
+{% else %}
+<div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
+    <div class="d-flex">
+        <div>
+            <img src="/media/{{x.img}}"  class=" custom-block-image img-fluid" alt="">
+            <a href="/oquv_true/{{x.id}}"  class="btn btn-success">Appect</a>
+            <a href="/delete_true/{{x.id}}" class="btn btn-danger">Remove</a>
+        </div>
+
+
+        <div class="custom-block-topics-listing-info ">
+<p class="bg-primary text-white " style=" word-wrap: break-word; text-transform: capitalize;">BODY : <br> {{x.body}}</p>
+<p class="bg-primary text-white " style=" word-wrap: break-word; text-transform: capitalize;">TITLE : <br> {{x.title}}</p>
+<p class="bg-primary text-white " style=" word-wrap: break-word; text-transform: capitalize;">USER : <br> {{x.user}}</p>
+<p class="bg-primary text-white " style=" word-wrap: break-word; text-transform: capitalize;">NUMBER : <br> {{x.number}}</p>
+<p class="bg-primary text-white " style=" word-wrap: break-word; text-transform: capitalize;">telegram : <br> {{x.telegram}}</p>
+<p class="bg-primary text-white " style=" word-wrap: break-word; text-transform: capitalize;">instagram : <br> {{x.instagram}}</p>
+<p class="bg-primary text-white " style=" word-wrap: break-word; text-transform: capitalize;">facebook : <br> {{x.facebook}}</p>
+<p class="bg-primary text-white " style=" word-wrap: break-word; text-transform: capitalize;">viloyat : <br> {{x.viloyat1}}</p>
+<p class="bg-primary text-white " style=" word-wrap: break-word; text-transform: capitalize;">manzil : <br> {{x.manzil}}</p>
+
+
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+
+{% endif %}
+    
+
+
+            {% endblock content %}          
